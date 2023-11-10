@@ -1,17 +1,8 @@
 package com.example.xpense_tracker.ui.login;
 
 import android.app.Activity;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -23,10 +14,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.xpense_tracker.MainActivity;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.xpense_tracker.BottomNavigationActivity;
 import com.example.xpense_tracker.R;
-import com.example.xpense_tracker.ui.login.LoginViewModel;
-import com.example.xpense_tracker.ui.login.LoginViewModelFactory;
 import com.example.xpense_tracker.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -137,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void redirectToMainActivity() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), BottomNavigationActivity.class);
         startActivity(intent);
     }
 
