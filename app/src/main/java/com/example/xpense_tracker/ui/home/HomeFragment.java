@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.xpense_tracker.AddExpenseOrIncomeDialogFragment;
 import com.example.xpense_tracker.R;
 import com.example.xpense_tracker.databinding.FragmentHomeBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,7 +36,7 @@ public class HomeFragment extends Fragment {
         FloatingActionButton button = root.findViewById(R.id.floatingActionButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getContext(), "hello add", Toast.LENGTH_LONG).show();
+                AddExpenseOrIncomeDialogFragment.newInstance().show(getChildFragmentManager(), "addExpenseOrIncomeDialog");
             }
         });
         return root;
