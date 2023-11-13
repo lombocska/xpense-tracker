@@ -8,7 +8,7 @@
     android:clipToPadding="false"
     android:paddingTop="@dimen/list_item_spacing_half"
     android:paddingBottom="@dimen/list_item_spacing_half"
-    tools:context=".AddExpenseOrIncomeDialogFragment">
+    tools:context=".ui.home.AddExpenseOrIncomeDialogFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutTapper"
@@ -32,16 +32,19 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayoutTapper" />
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup"
+        android:id="@+id/incomeOrExpenseChipGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:paddingHorizontal="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:selectionRequired="true"
+        app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip"
+            android:id="@+id/expenseChip"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -50,7 +53,8 @@
             android:text="@string/expense"/>
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip2"
+            android:id="@+id/incomeChip"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -58,5 +62,17 @@
             android:textColor="@color/pastel_braun"
             android:text="@string/income"/>
     </com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/incomeOrExpenseCategoriesChipGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingHorizontal="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/incomeOrExpenseChipGroup"
+        app:selectionRequired="true"
+        app:singleSelection="true"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

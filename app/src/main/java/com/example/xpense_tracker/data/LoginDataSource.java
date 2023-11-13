@@ -1,5 +1,6 @@
 package com.example.xpense_tracker.data;
 
+import static com.example.xpense_tracker.data.QueryConstant.DATABASE;
 import static com.example.xpense_tracker.data.model.UserContract.UserContent.COLUMN_NAME_EMAIL;
 import static com.example.xpense_tracker.data.model.UserContract.UserContent.COLUMN_NAME_PASSWORD;
 import static com.example.xpense_tracker.data.model.UserContract.UserContent.TABLE_NAME;
@@ -21,7 +22,6 @@ import java.io.IOException;
  */
 public class LoginDataSource extends SQLiteOpenHelper {
 
-    public static final String DATABASE = "ExpenseTracker.db";
 
     public LoginDataSource(@Nullable Context context) {
         super(context, DATABASE, null, 1);
