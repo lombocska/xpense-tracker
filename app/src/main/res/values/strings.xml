@@ -18,4 +18,16 @@
     <string name="amount">amount</string>
     <string name="add">ADD</string>
 
+
+    <string name="cat_lists_title">Lists</string>
+    <string name="cat_lists_description">
+    Lists are continuous, vertical indexes of text or images.
+  </string>
+    <string name="mtrl_list_item_clicked">List item clicked</string>
+    <string name="mtrl_list_item_one_line">One Line Item</string>
+    <string name="mtrl_list_item_two_line">Two Line Item</string>
+    <string name="mtrl_list_item_three_line">Three Line Item</string>
+    <string name="mtrl_list_item_secondary_text">Secondary Text</string>
+    <string name="mtrl_list_item_tertiary_text">Tertiary Text</string>
+
 </resources>

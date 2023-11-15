@@ -4,11 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.xpense_tracker.R;
 import com.example.xpense_tracker.databinding.FragmentHomeBinding;
@@ -17,6 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -25,8 +27,12 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        RecyclerView transactionsListView =
+                (RecyclerView) inflater.inflate(R.layout.fragment_transaction_list, container, false);
+
+        transactionsListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        transactionsListView.setAdapter(new TransactionListAdapter());
+        binding.transactionsMaterialCardView.addView(transactionsListView);
 
         FloatingActionButton button = root.findViewById(R.id.floatingActionButton);
         button.setOnClickListener(new View.OnClickListener() {

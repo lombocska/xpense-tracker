@@ -34,8 +34,16 @@ public class CategoryDataSource extends SQLiteOpenHelper {
         this.getWritableDatabase().execSQL(QueryConstant.CREATE_SUB_CATEGORY_TABLE);
         addInitialIncomeCategory("Income", "Investment", "Other");
         addInitialExpenseCategory("Food", "Housing", "Shopping", "Transport", "Entertainment");
-        addInitialSubCategory(Map.of("Food", List.of("Restaurant", "CoffeeShop", "Grocery")), CategoryType.EXPENSE);
+
         addInitialSubCategory(Map.of("Income", List.of("Rate", "Rental", "Sale")), CategoryType.INCOME);
+        addInitialSubCategory(Map.of("Investment", List.of("Other")), CategoryType.INCOME);
+        addInitialSubCategory(Map.of("Other", List.of("Other")), CategoryType.INCOME);
+
+        addInitialSubCategory(Map.of("Food", List.of("Restaurant", "CoffeeShop", "Grocery")), CategoryType.EXPENSE);
+        addInitialSubCategory(Map.of("Housing", List.of("Other")), CategoryType.EXPENSE);
+        addInitialSubCategory(Map.of("Shopping", List.of("Other")), CategoryType.EXPENSE);
+        addInitialSubCategory(Map.of("Transport", List.of("Other")), CategoryType.EXPENSE);
+        addInitialSubCategory(Map.of("Entertainment", List.of("Other")), CategoryType.EXPENSE);
     }
 
     @Override
