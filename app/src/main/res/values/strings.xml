@@ -15,5 +15,7 @@
     <string name="title_notifications">Settings</string>
     <string name="expense">EXPENSE</string>
     <string name="income">INCOME</string>
+    <string name="amount">amount</string>
+    <string name="add">ADD</string>
 
 </resources>

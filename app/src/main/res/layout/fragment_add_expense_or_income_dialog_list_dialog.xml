@@ -65,15 +65,6 @@
             android:textSize="30sp" />
     </com.google.android.material.chip.ChipGroup>
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/materialDivider1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintStart_toStartOf="@+id/incomeOrExpenseChipGroup"
-        app:layout_constraintTop_toBottomOf="@+id/incomeOrExpenseChipGroup" />
-
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/incomeOrExpenseCategoriesChipGroup"
         android:layout_width="match_parent"
@@ -81,16 +72,9 @@
         android:layout_marginTop="8dp"
         android:paddingHorizontal="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialDivider1"
+        app:layout_constraintTop_toBottomOf="@+id/incomeOrExpenseChipGroup"
         app:selectionRequired="true"
         app:singleSelection="true" />
-
-    <!--    <com.google.android.material.divider.MaterialDivider-->
-    <!--        android:id="@+id/materialDivider2"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/incomeOrExpenseCategoriesChipGroup"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/incomeOrExpenseCategoriesChipGroup" />-->
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/incomeOrExpenseSubCategoriesChipGroup"
@@ -103,11 +87,29 @@
         app:selectionRequired="true"
         app:singleSelection="true" />
 
-    <!--    <com.google.android.material.divider.MaterialDivider-->
-    <!--        android:id="@+id/materialDivider3"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/incomeOrExpenseSubCategoriesChipGroup"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/incomeOrExpenseSubCategoriesChipGroup" />-->
+    <LinearLayout
+        android:id="@+id/amountLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/incomeOrExpenseSubCategoriesChipGroup" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/addFabButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="20dp"
+        android:paddingHorizontal="24dp"
+        android:text="@string/add"
+        android:textSize="25sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amountLinearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
