@@ -17,7 +17,7 @@ public class CategoryRepository {
 
     public static CategoryRepository getInstance(CategoryDataSource dataSource) {
         if (instance == null) {
-            return new CategoryRepository(dataSource);
+            instance = new CategoryRepository(dataSource);
         }
         return instance;
     }

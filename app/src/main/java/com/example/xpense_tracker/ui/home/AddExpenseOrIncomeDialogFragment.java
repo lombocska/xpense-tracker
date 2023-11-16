@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ExpandableListAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,8 +21,11 @@ import androidx.annotation.Nullable;
 import com.example.xpense_tracker.R;
 import com.example.xpense_tracker.data.CategoryDataSource;
 import com.example.xpense_tracker.data.CategoryRepository;
+import com.example.xpense_tracker.data.ExpenseDataSource;
+import com.example.xpense_tracker.data.ExpenseRepository;
 import com.example.xpense_tracker.data.model.Category;
 import com.example.xpense_tracker.data.model.CategoryType;
+import com.example.xpense_tracker.data.model.Expense;
 import com.example.xpense_tracker.data.model.SubCategory;
 import com.example.xpense_tracker.databinding.FragmentAddExpenseOrIncomeDialogListDialogBinding;
 import com.example.xpense_tracker.databinding.FragmentFilterChipBinding;
@@ -45,6 +49,7 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
 
     private FragmentAddExpenseOrIncomeDialogListDialogBinding binding;
     private CategoryRepository categoryRepository;
+    private ExpenseRepository expenseRepository;
 
     public static AddExpenseOrIncomeDialogFragment newInstance() {
         return new AddExpenseOrIncomeDialogFragment();
@@ -57,6 +62,7 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
         this.getDialog().getWindow().setSoftInputMode(SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         binding = FragmentAddExpenseOrIncomeDialogListDialogBinding.inflate(inflater, container, false);
         categoryRepository = CategoryRepository.getInstance(new CategoryDataSource(getContext()));
+        expenseRepository = ExpenseRepository.getInstance(new ExpenseDataSource(getContext()));
 
         List<Chip> incomeCategoryChips = createIncomeCategories();
         List<Chip> expenseCategoryChips = createExpenseCategories();
@@ -89,14 +95,14 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
 
     }
 
-    private static void clearCategoryChips(ChipGroup incomeOrExpenseCategoriesChipGroup) {
-        incomeOrExpenseCategoriesChipGroup.removeAllViews();
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private static void clearCategoryChips(ChipGroup incomeOrExpenseCategoriesChipGroup) {
+        incomeOrExpenseCategoriesChipGroup.removeAllViews();
     }
 
     private List<Chip> createIncomeCategories() {
@@ -107,17 +113,14 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
     @NonNull
     private List<Chip> getCategoryChipsWithSubCategoryChips(List<Category> incomeCategories) {
         return incomeCategories.stream()
-                .map(category -> {
-                    Chip categoryFilterChip = createFilterChip(category.getId(), category.getName());
-                    addCategoryListener(categoryFilterChip);
-                    return categoryFilterChip;
-                })
+                .map(this::getCategoryChipWithListener)
                 .collect(Collectors.toList());
     }
 
-    private void addCategoryListener(Chip categoryFilterChip) {
-        categoryFilterChip.setOnClickListener(new View.OnClickListener() {
-            ChipGroup subCategoryChipGroup = binding.incomeOrExpenseSubCategoriesChipGroup;
+    private Chip getCategoryChipWithListener(Category category) {
+        Chip categoryChip = createFilterChip(category.getId(), category.getName());
+        categoryChip.setOnClickListener(new View.OnClickListener() {
+            final ChipGroup subCategoryChipGroup = binding.incomeOrExpenseSubCategoriesChipGroup;
 
             @Override
             public void onClick(View v) {
@@ -125,29 +128,28 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
                 getClearAmountLinearLayout();
                 hideAddButton();
 
-                List<SubCategory> subCategories = categoryRepository.getSubCategories(categoryFilterChip.getId());
+                List<SubCategory> subCategories = categoryRepository.getSubCategories(category.getId());
                 List<Chip> subCategoryChips = subCategories.stream()
-                        .map(subCategory -> {
-                            Chip subCategoryFilterChip = createFilterChip(subCategory.getId(), subCategory.getName());
-                            addSubCategoryListener(subCategoryFilterChip);
-                            return subCategoryFilterChip;
-                        })
+                        .map(this::addSubCategoryListener)
                         .collect(Collectors.toList());
                 subCategoryChips.forEach(subCategoryChipGroup::addView);
             }
 
-            private void addSubCategoryListener(Chip subCategoryFilterChip) {
+            private Chip addSubCategoryListener(SubCategory subCategory) {
+                Chip subCategoryFilterChip = createFilterChip(subCategory.getId(), subCategory.getName());
                 subCategoryFilterChip.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        addAmountInputEditText(subCategoryFilterChip.getText());
+                        addAmountInputEditText(category, subCategory);
                     }
                 });
+                return subCategoryFilterChip;
             }
         });
+        return categoryChip;
     }
 
-    private void addAmountInputEditText(CharSequence text) {
+    private void addAmountInputEditText(Category category, SubCategory subCategory) {
         LinearLayout amountLinearLayout = getClearAmountLinearLayout();
         hideAddButton();
 
@@ -178,8 +180,10 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
                     binding.addFabButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Expense expense = expenseRepository.addExpense(category, subCategory, editText.getText().toString());// TODO note field is missing from dialog with datepicker
+                            ExpenseListAdapter.getInstance(getContext()).addExpense(expense);
                             dismiss();
-                            Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show(); // testing purpose
+                            Toast.makeText(getContext(), "Added new expense with amount " + editText.getText(), Toast.LENGTH_LONG).show(); // testing purpose
                         }
                     });
 
