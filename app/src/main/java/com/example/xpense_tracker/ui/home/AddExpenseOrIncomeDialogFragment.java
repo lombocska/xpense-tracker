@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ExpandableListAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +61,7 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
         this.getDialog().getWindow().setSoftInputMode(SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         binding = FragmentAddExpenseOrIncomeDialogListDialogBinding.inflate(inflater, container, false);
         categoryRepository = CategoryRepository.getInstance(new CategoryDataSource(getContext()));
-        expenseRepository = ExpenseRepository.getInstance(new ExpenseDataSource(getContext()));
+        expenseRepository = ExpenseRepository.getInstance(ExpenseDataSource.getInstance(getContext()));
 
         List<Chip> incomeCategoryChips = createIncomeCategories();
         List<Chip> expenseCategoryChips = createExpenseCategories();
@@ -111,14 +110,14 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
     }
 
     @NonNull
-    private List<Chip> getCategoryChipsWithSubCategoryChips(List<Category> incomeCategories) {
-        return incomeCategories.stream()
+    private List<Chip> getCategoryChipsWithSubCategoryChips(List<Category> categories) {
+        return categories.stream()
                 .map(this::getCategoryChipWithListener)
                 .collect(Collectors.toList());
     }
 
     private Chip getCategoryChipWithListener(Category category) {
-        Chip categoryChip = createFilterChip(category.getId(), category.getName());
+        Chip categoryChip = createFilterChip(category.getId(), category.getName(), category.getType());
         categoryChip.setOnClickListener(new View.OnClickListener() {
             final ChipGroup subCategoryChipGroup = binding.incomeOrExpenseSubCategoriesChipGroup;
 
@@ -136,7 +135,7 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
             }
 
             private Chip addSubCategoryListener(SubCategory subCategory) {
-                Chip subCategoryFilterChip = createFilterChip(subCategory.getId(), subCategory.getName());
+                Chip subCategoryFilterChip = createFilterChip(subCategory.getId(), subCategory.getName(), subCategory.getType());
                 subCategoryFilterChip.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -216,7 +215,7 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
         return getCategoryChipsWithSubCategoryChips(expenseCategories);
     }
 
-    private Chip createFilterChip(int id, String name) {
+    private Chip createFilterChip(int id, String name, String categoryTypeName) {
         Chip chip = FragmentFilterChipBinding.inflate(getLayoutInflater()).getRoot();
         chip.setId(id);
         chip.setText(name);

@@ -29,7 +29,16 @@ import java.util.List;
 
 public class ExpenseDataSource extends SQLiteOpenHelper {
 
-    public ExpenseDataSource(@Nullable Context context) {
+    private static volatile ExpenseDataSource instance;
+
+    public static ExpenseDataSource getInstance(Context context) {
+        if (instance == null) {
+            instance = new ExpenseDataSource(context);
+        }
+        return instance;
+    }
+
+    private ExpenseDataSource(@Nullable Context context) {
         super(context, DATABASE, null, 1);
         this.getWritableDatabase().execSQL(QueryConstant.DROP_EXPENSE_TABLE);
         this.getWritableDatabase().execSQL(QueryConstant.CREATE_EXPENSE_TABLE);

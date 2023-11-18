@@ -33,7 +33,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private ExpenseListAdapter(Context context) {
-        expenseRepository = ExpenseRepository.getInstance(new ExpenseDataSource(context));
+        expenseRepository = ExpenseRepository.getInstance(ExpenseDataSource.getInstance(context));
         mItem = expenseRepository.getAllExpense();
     }
 

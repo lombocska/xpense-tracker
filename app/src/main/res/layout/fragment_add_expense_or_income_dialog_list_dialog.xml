@@ -51,7 +51,6 @@
             android:layout_height="wrap_content"
             android:text="@string/expense"
             android:textAlignment="center"
-            android:textColor="@color/pastel_braun"
             android:textSize="30sp" />
 
         <com.google.android.material.chip.Chip
@@ -61,7 +60,6 @@
             android:layout_height="wrap_content"
             android:text="@string/income"
             android:textAlignment="center"
-            android:textColor="@color/pastel_braun"
             android:textSize="30sp" />
     </com.google.android.material.chip.ChipGroup>
 
@@ -101,7 +99,6 @@
         android:id="@+id/addFabButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginHorizontal="24dp"
         android:layout_marginBottom="20dp"
         android:paddingHorizontal="24dp"

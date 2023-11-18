@@ -12,13 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.xpense_tracker.R;
-import com.example.xpense_tracker.data.ExpenseDataSource;
-import com.example.xpense_tracker.data.ExpenseRepository;
-import com.example.xpense_tracker.data.model.Expense;
 import com.example.xpense_tracker.databinding.FragmentHomeBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
