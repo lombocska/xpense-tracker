@@ -46,7 +46,8 @@ public class ExpenseDataSource extends SQLiteOpenHelper {
                 new Expense("Food", "Restaurant", CategoryType.EXPENSE.name(), LocalDate.now(), "300", "shrimps"),
                 new Expense("Food", "CoffeeShop", CategoryType.EXPENSE.name(), LocalDate.now(), "500", "latte"),
                 new Expense("Income", "Rate", CategoryType.INCOME.name(), LocalDate.now(), "1000", "CocaColastocks"),
-                new Expense("Income", "Sale", CategoryType.INCOME.name(), LocalDate.now(),"200", "shoes")
+                new Expense("Income", "Sale", CategoryType.INCOME.name(), LocalDate.now(),"200", "shoes"),
+                new Expense("Income", "Rental", CategoryType.INCOME.name(), LocalDate.of(2023, 11, 1),"200", "shoes")
         ).forEach(this::saveExpense);
     }
 

@@ -15,10 +15,12 @@
     <string name="title_notifications">Settings</string>
     <string name="expense">EXPENSE</string>
     <string name="income">INCOME</string>
+    <string name="all">ALL</string>
     <string name="amount">amount</string>
     <string name="add">ADD</string>
-    <string name="filterdate">FILTER BY DATE</string>
+    <string name="filterdate">DATE RANGE</string>
     <string name="date_picker_title">Pick a date for your expense</string>
+    <string name="date_range_picker_title">Select a date range</string>
 
 
     <string name="cat_lists_title">Lists</string>
