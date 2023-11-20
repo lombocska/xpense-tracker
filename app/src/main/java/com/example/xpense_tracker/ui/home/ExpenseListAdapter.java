@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.xpense_tracker.R;
 import com.example.xpense_tracker.data.ExpenseDataSource;
 import com.example.xpense_tracker.data.ExpenseRepository;
+import com.example.xpense_tracker.data.model.CategoryType;
 import com.example.xpense_tracker.data.model.Expense;
 
 import java.util.List;
@@ -65,7 +66,11 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         vh.text.setText(String.format(expense.getAmount().toString()));
         vh.secondary.setText(expense.getCategory() + ", " + expense.getSubCategory());
         vh.tertiary.setText(expense.getCreatedAt().toString());
-        vh.icon.setImageResource(R.drawable.logo_avatar_anonymous_40dp);
+        if(CategoryType.INCOME.name().equals(expense.getType())) {
+            vh.icon.setImageResource(R.drawable.revenue);
+        } else {
+            vh.icon.setImageResource(R.drawable.earning);
+        }
     }
 
     @Override
