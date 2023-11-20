@@ -17,6 +17,7 @@
     <string name="income">INCOME</string>
     <string name="amount">amount</string>
     <string name="add">ADD</string>
+    <string name="date_picker_title">Pick a date for your expense</string>
 
 
     <string name="cat_lists_title">Lists</string>

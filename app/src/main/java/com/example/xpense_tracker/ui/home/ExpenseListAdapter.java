@@ -66,7 +66,6 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         vh.secondary.setText(expense.getCategory() + ", " + expense.getSubCategory());
         vh.tertiary.setText(expense.getCreatedAt().toString());
         vh.icon.setImageResource(R.drawable.logo_avatar_anonymous_40dp);
-        //TODO note field?
     }
 
     @Override

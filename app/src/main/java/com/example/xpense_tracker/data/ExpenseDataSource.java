@@ -43,10 +43,10 @@ public class ExpenseDataSource extends SQLiteOpenHelper {
         this.getWritableDatabase().execSQL(QueryConstant.DROP_EXPENSE_TABLE);
         this.getWritableDatabase().execSQL(QueryConstant.CREATE_EXPENSE_TABLE);
         List.of(
-                new Expense("Food", "Restaurant", CategoryType.EXPENSE.name(), LocalDate.now(), "300"),
-                new Expense("Food", "CoffeeShop", CategoryType.EXPENSE.name(), LocalDate.now(), "500"),
-                new Expense("Income", "Rate", CategoryType.INCOME.name(), LocalDate.now(), "1000"),
-                new Expense("Income", "Sale", CategoryType.INCOME.name(), LocalDate.now(),"200")
+                new Expense("Food", "Restaurant", CategoryType.EXPENSE.name(), LocalDate.now(), "300", "shrimps"),
+                new Expense("Food", "CoffeeShop", CategoryType.EXPENSE.name(), LocalDate.now(), "500", "latte"),
+                new Expense("Income", "Rate", CategoryType.INCOME.name(), LocalDate.now(), "1000", "CocaColastocks"),
+                new Expense("Income", "Sale", CategoryType.INCOME.name(), LocalDate.now(),"200", "shoes")
         ).forEach(this::saveExpense);
     }
 
@@ -91,13 +91,6 @@ public class ExpenseDataSource extends SQLiteOpenHelper {
         return expenses;
     }
 
-    public Expense createExpense(Category category, SubCategory subCategory, String amount) {
-        //TODO createdAt, note
-        Expense newExpense = new Expense(category.getName(), subCategory.getName(), category.getType(), LocalDate.now(), amount);
-        saveExpense(newExpense);
-        return newExpense;
-    }
-
     private void saveExpense(Expense expense) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME_CATEGORY, expense.getCategory());
@@ -109,5 +102,9 @@ public class ExpenseDataSource extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_NAME, null, values);
+    }
+
+    public void createExpense(Expense newExpense) {
+        saveExpense(newExpense);
     }
 }

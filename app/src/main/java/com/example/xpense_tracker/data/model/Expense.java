@@ -1,6 +1,5 @@
 package com.example.xpense_tracker.data.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Expense {
@@ -9,19 +8,23 @@ public class Expense {
     private String category;
     private String subCategory;
     private String type;
-    private String note;
     private LocalDate createdAt;
     private String amount;
+    private String note;
 
-    public Expense(String category, String subCategory, String type, LocalDate createdAt, String amount) {
+    public Expense(String category, String subCategory, String type, LocalDate createdAt, String note, String amount) {
         this.category = category;
         this.subCategory = subCategory;
         this.type = type;
         this.createdAt = createdAt;
         this.amount = amount;
+        this.note = note;
     }
 
-    public Expense(int id, String category, String subCategory, String type, LocalDate createdAt, String note, String amount) {
+    public Expense() {
+    }
+
+    public Expense(int id, String category, String subCategory, String type, LocalDate createdAt, String amount, String note) {
         this.id = id;
         this.category = category;
         this.subCategory = subCategory;
@@ -57,5 +60,33 @@ public class Expense {
 
     public String getAmount() {
         return amount;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }
