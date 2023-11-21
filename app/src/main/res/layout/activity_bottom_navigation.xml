@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="?attr/actionBarSize">
+    android:layout_height="match_parent">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
@@ -22,8 +21,8 @@
     <fragment
         android:id="@+id/nav_host_fragment_activity_bottom_navigation"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="400dp"
-        android:layout_height="518dp"
+        android:layout_width="402dp"
+        android:layout_height="625dp"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintHorizontal_bias="0.454"
