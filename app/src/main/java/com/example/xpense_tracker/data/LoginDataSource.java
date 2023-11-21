@@ -22,7 +22,6 @@ import java.io.IOException;
  */
 public class LoginDataSource extends SQLiteOpenHelper {
 
-
     public LoginDataSource(@Nullable Context context) {
         super(context, DATABASE, null, 1);
     }

@@ -24,6 +24,7 @@ import com.example.xpense_tracker.BottomNavigationActivity;
 import com.example.xpense_tracker.R;
 import com.example.xpense_tracker.databinding.ActivityLoginBinding;
 
+//https://appsnipp.com/free-login-registration-xml-design-for-android/
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;

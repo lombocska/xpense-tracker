@@ -25,6 +25,12 @@
     <string name="home_title">HOME</string>
     <string name="stat_title">STAT</string>
     <string name="settings_title">SETTINGS</string>
+    <string name="currency">currency</string>
+    <string name="huf">HUF</string>
+    <string name="usd">USD</string>
+    <string name="eur">EUR</string>
+    <string name="shared_preference_file_name">com.xpense_tracker.app</string>
+    <string name="shared_preference_currency_key">currency_key</string>
 
 
     <string name="cat_lists_title">Lists</string>
@@ -38,4 +44,9 @@
     <string name="mtrl_list_item_secondary_text">Secondary Text</string>
     <string name="mtrl_list_item_tertiary_text">Tertiary Text</string>
 
+    <string name="register">REGISTER</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="signup_login_hint">Already have an account? Sign In</string>
+    <string name="login_signup_hint">Don\'t have an account? Sign Up</string>
 </resources>

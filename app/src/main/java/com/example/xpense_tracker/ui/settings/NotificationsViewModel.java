@@ -1,4 +1,4 @@
-package com.example.xpense_tracker.ui.notifications;
+package com.example.xpense_tracker.ui.settings;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -38,7 +38,6 @@ public class StatisticFragment extends Fragment {
     public static final String EXPENSE = CategoryType.EXPENSE.name();
     private FragmentStatisticBinding binding;
     private ExpenseRepository expenseRepository;
-    private BarChart expenseBarChartByMonth;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,11 +49,11 @@ public class StatisticFragment extends Fragment {
 
         PieChart incomePieChart = binding.incomePieChart;
         PieChart expensePieChart = binding.expensePeChart;
-        expenseBarChartByMonth = binding.barChart;
+        BarChart expenseBarChartByMonth = binding.barChart;
 
         ExpensePieChart.showPieChart(incomePieChart, getIncomeAmountPerCategoryType(), INCOME);
         ExpensePieChart.showPieChart(expensePieChart, getExpenseAmountPerCategoryType(), EXPENSE);
-        GroupedBarChart.showBarChart(getLast6MonthIncome(), getLast6MonthExpense(),  expenseBarChartByMonth);
+        GroupedBarChart.showBarChart(getLast6MonthIncome(), getLast6MonthExpense(), expenseBarChartByMonth);
         return root;
     }
 
