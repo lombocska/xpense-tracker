@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.summingInt;
 
 import com.example.xpense_tracker.data.model.Category;
+import com.example.xpense_tracker.data.model.CategoryType;
 import com.example.xpense_tracker.data.model.Expense;
 import com.example.xpense_tracker.data.model.SubCategory;
 
@@ -40,5 +41,13 @@ public class ExpenseRepository {
         return getAllExpense().stream()
                 .filter(e -> name.equals(e.getType()))
                 .collect(groupingBy(Expense::getCategory, summingInt(e -> new BigDecimal(e.getAmount()).intValue())));
+    }
+
+    public List<Expense> getExpenses() {
+        return dataSource.getExpenses(CategoryType.EXPENSE);
+    }
+
+    public List<Expense> getIncomes() {
+        return dataSource.getExpenses(CategoryType.INCOME);
     }
 }

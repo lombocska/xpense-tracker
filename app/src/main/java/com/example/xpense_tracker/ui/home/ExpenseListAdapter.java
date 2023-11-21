@@ -63,7 +63,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void addExpense(Expense expense) {
         mItem.add(0, expense);
-        mItem.sort(SortComparatorByDate());
+        mItem.sort(sortComparatorByDate());
         notifyDataSetChanged();
     }
 
@@ -110,12 +110,12 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private List<Expense> getAllExpense() {
         List<Expense> allExpense = expenseRepository.getAllExpense();
-        allExpense.sort(SortComparatorByDate());
+        allExpense.sort(sortComparatorByDate());
         return allExpense;
     }
 
     @NonNull
-    private static Comparator<Expense> SortComparatorByDate() {
+    public static Comparator<Expense> sortComparatorByDate() {
         return new Comparator<Expense>() {
             @Override
             public int compare(Expense o1, Expense o2) {

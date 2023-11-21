@@ -18,10 +18,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.example.xpense_tracker.data.model.Category;
 import com.example.xpense_tracker.data.model.CategoryType;
 import com.example.xpense_tracker.data.model.Expense;
-import com.example.xpense_tracker.data.model.SubCategory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -43,11 +41,15 @@ public class ExpenseDataSource extends SQLiteOpenHelper {
         this.getWritableDatabase().execSQL(QueryConstant.DROP_EXPENSE_TABLE);
         this.getWritableDatabase().execSQL(QueryConstant.CREATE_EXPENSE_TABLE);
         List.of(
-                new Expense("Food", "Restaurant", CategoryType.EXPENSE.name(), LocalDate.now(), "300", "shrimps"),
-                new Expense("Food", "CoffeeShop", CategoryType.EXPENSE.name(), LocalDate.now(), "500", "latte"),
-                new Expense("Income", "Rate", CategoryType.INCOME.name(), LocalDate.now(), "1000", "CocaColastocks"),
-                new Expense("Income", "Sale", CategoryType.INCOME.name(), LocalDate.now(),"200", "shoes"),
-                new Expense("Income", "Rental", CategoryType.INCOME.name(), LocalDate.of(2023, 11, 1),"200", "shoes")
+                new Expense("Food", "Restaurant", CategoryType.EXPENSE.name(), LocalDate.now(),"shrimps", "500"),
+                new Expense("Food", "CoffeeShop", CategoryType.EXPENSE.name(), LocalDate.now(),  "latte", "300"),
+                new Expense("Income", "Rate", CategoryType.INCOME.name(), LocalDate.now(), "CocaColastocks", "1000"),
+                new Expense("Income", "Sale", CategoryType.INCOME.name(), LocalDate.now(),  "shoes", "400"),
+                new Expense("Income", "Sale", CategoryType.INCOME.name(), LocalDate.now(),  "shoes", "500"),
+                new Expense("Investment", "Other", CategoryType.INCOME.name(), LocalDate.now(),  "shoes", "700"),
+                new Expense("Other", "Other", CategoryType.INCOME.name(), LocalDate.now(),  "shoes", "800"),
+                new Expense("Income", "Sale", CategoryType.INCOME.name(), LocalDate.now(),  "shoes", "10"),
+                new Expense("Income", "Rental", CategoryType.INCOME.name(), LocalDate.of(2023, 11, 1),  "shoes", "500")
         ).forEach(this::saveExpense);
     }
 
@@ -92,6 +94,41 @@ public class ExpenseDataSource extends SQLiteOpenHelper {
         return expenses;
     }
 
+    public List<Expense> getExpenses(CategoryType type) {
+        List<Expense> expenses = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Filter results WHERE "name" = 'something'
+        String selection = COLUMN_NAME_TYPE + " = ?";
+        String[] selectionArgs = {type.name()};
+        String sortOrder = COLUMN_NAME_ID + " DESC";
+        Cursor cursor = db.query(
+                TABLE_NAME,        // The table to query
+                null,              // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,              // don't filter by row groups
+                sortOrder          // The sort order
+        );
+        if (cursor.moveToFirst()) {
+            do {
+                //id, category, sub_category, type, created_at, note, amount
+                Expense expense = new Expense(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        LocalDate.parse(cursor.getString(4)),
+                        cursor.getString(5),
+                        cursor.getString(6));
+                expenses.add(expense);
+            } while (cursor.moveToNext());
+        }
+        return expenses;
+    }
+
     private void saveExpense(Expense expense) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME_CATEGORY, expense.getCategory());
@@ -108,4 +145,5 @@ public class ExpenseDataSource extends SQLiteOpenHelper {
     public void createExpense(Expense newExpense) {
         saveExpense(newExpense);
     }
+
 }

@@ -16,7 +16,7 @@ public final class QueryConstant {
     public static final String DROP_SUB_CATEGORY_TABLE = "drop Table if exists sub_category";
     //SQLite does not handle date as a db type, but it has a date() built-in function
     //transaction isa keyword in SQLite, do not use it as a table name
-    public static final String CREATE_EXPENSE_TABLE = "create Table expense(id INTEGER primary key, category TEXT, sub_category TEXT, type TEXT, created_at TEXT, note TEXT, amount TEXT)";
+    public static final String CREATE_EXPENSE_TABLE = "create Table expense(id INTEGER primary key, category TEXT, sub_category TEXT, type TEXT, created_at TEXT, amount TEXT, note TEXT)";
     public static final String DROP_EXPENSE_TABLE = "drop Table if exists expense";
 
 }
