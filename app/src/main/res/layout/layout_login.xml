@@ -17,6 +17,7 @@
 
         <TextView
             style="@style/headerTextPrimary"
+            android:textColor="@color/pastel_beige"
             android:text="Login"
             android:layout_marginTop="@dimen/loginViewsMargin"/>
 
@@ -58,7 +59,8 @@
             android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.Material3.Button.ElevatedButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:textColor="@color/pastel_beige"
             android:text="@string/action_sign_in"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/loginViewsMargin"/>

@@ -24,6 +24,7 @@ public class LoginDataSource extends SQLiteOpenHelper {
 
     public LoginDataSource(@Nullable Context context) {
         super(context, DATABASE, null, 1);
+        this.getWritableDatabase().execSQL(QueryConstant.CREATE_USERS_TABLE);
     }
 
     @Override
@@ -37,17 +38,16 @@ public class LoginDataSource extends SQLiteOpenHelper {
     }
 
     public Result<LoggedInUser> login(String username, String password) {
-        int indexOfAt = username.indexOf("@");
-
         try {
+            String editedUsername = username.contains("@") ? username.substring(0, username.indexOf("@")) : username;
             if (hasAlreadyRegistered(username)) {
                 if(isPasswordValid(password)) {
-                    LoggedInUser loggedInUser = new LoggedInUser(username, username.substring(0, indexOfAt));
+                    LoggedInUser loggedInUser = new LoggedInUser(username, editedUsername);
                     return new Result.Success<>(loggedInUser);
                 }
             } else {
                 registerUser(username, password);
-                LoggedInUser loggedInUser = new LoggedInUser(username, username.substring(0, indexOfAt));
+                LoggedInUser loggedInUser = new LoggedInUser(username, editedUsername);
                 return new Result.Success<>(loggedInUser);
             }
         } catch (Exception e) {

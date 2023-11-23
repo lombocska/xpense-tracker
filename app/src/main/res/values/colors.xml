@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="pastel_braun">#594A47</color>
+    <color name="pastel_beige">#d0ae8b</color>
     <color name="ios_tap_element">#c1c7d0</color>
 
     <color name="colorPrimary">#1F5BF3</color>
