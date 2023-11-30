@@ -19,6 +19,7 @@
     <string name="amount">amount</string>
     <string name="note">note</string>
     <string name="add">ADD</string>
+    <string name="update">UPDATE</string>
     <string name="filterdate">DATE RANGE</string>
     <string name="date_picker_title">Pick a date for your expense</string>
     <string name="date_range_picker_title">Select a date range</string>

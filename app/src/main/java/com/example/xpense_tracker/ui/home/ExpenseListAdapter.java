@@ -2,10 +2,13 @@ package com.example.xpense_tracker.ui.home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,6 +57,18 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         bind((ThreeLineItemViewHolder) viewHolder, mItem.get(position));
+        //open AddExpenseOrIncomeDialogFragment for update
+        viewHolder.itemView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int itemPosition = viewHolder.getBindingAdapterPosition();
+                Expense updatableExpense = mItem.get(itemPosition);
+                AddExpenseOrIncomeDialogFragment
+                        .newInstanceWithUpdate(updatableExpense)
+                        .show(((FragmentActivity) v.getContext()).getSupportFragmentManager(), "AddExpenseOrIncomeDialogFragment for update");
+                return false;
+            }
+        });
     }
 
     public void addSwipeListener(RecyclerView recyclerView) {

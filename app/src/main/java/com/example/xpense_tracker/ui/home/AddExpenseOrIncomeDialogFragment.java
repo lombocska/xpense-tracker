@@ -35,6 +35,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -65,9 +66,25 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
     private ExtendedFloatingActionButton addButton;
     private TextInputEditText noteEditText;
     private Expense expense;
+    private boolean isUpdate = false;
+    private List<Category> incomeCategories = new ArrayList<>();
+    private List<Category> expenseCategories = new ArrayList<>();
+    List<SubCategory> subCategories = new ArrayList<>();
+
+    private AddExpenseOrIncomeDialogFragment(Expense expense) {
+        this.expense = expense;
+        this.isUpdate = true;
+    }
+
+    private AddExpenseOrIncomeDialogFragment() {
+    }
 
     public static AddExpenseOrIncomeDialogFragment newInstance() {
         return new AddExpenseOrIncomeDialogFragment();
+    }
+
+    public static AddExpenseOrIncomeDialogFragment newInstanceWithUpdate(Expense expense) {
+        return new AddExpenseOrIncomeDialogFragment(expense);
     }
 
     @Nullable
@@ -86,8 +103,66 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
 
         addCalendarButtonListener();
         addAddButtonListener();
-        return binding.getRoot();
 
+        //update
+        if (this.isUpdate) {
+            fillWithInitData();
+        }
+        return binding.getRoot();
+    }
+
+    private void fillWithInitData() {
+        if (CategoryType.INCOME.name().equals(this.expense.getType())) {
+            this.incomeChip.setChecked(true);
+            this.incomeChip.callOnClick();
+
+            Optional<Category> categoryOptional = incomeCategories.stream()
+                    .filter(category -> category.getName().equals(expense.getCategory()))
+                    .findFirst();
+            if (!categoryOptional.isPresent()) {
+                return;
+            }
+            Chip selectedIncomeCategoryChip = (Chip) this.incomeOrExpenseCategoriesChipGroup.findViewById(categoryOptional.get().getId());
+            selectedIncomeCategoryChip.setChecked(true);
+            selectedIncomeCategoryChip.callOnClick();
+
+            Optional<SubCategory> subCategoryOptional = subCategories.stream()
+                    .filter(subCategory -> subCategory.getName().equals(expense.getSubCategory()))
+                    .findFirst();
+            if (!subCategoryOptional.isPresent()) {
+                return;
+            }
+            Chip selectedSubIncomeCategoryChip = (Chip) this.incomeOrExpenseSubCategoriesChipGroup.findViewById(subCategoryOptional.get().getId());
+            selectedSubIncomeCategoryChip.setChecked(true);
+            selectedSubIncomeCategoryChip.callOnClick();
+
+        } else {
+            this.expenseChip.setChecked(true);
+            this.expenseChip.callOnClick();
+
+            Optional<Category> categoryOptional = expenseCategories.stream()
+                    .filter(category -> category.getName().equals(expense.getCategory()))
+                    .findFirst();
+            if (!categoryOptional.isPresent()) {
+                return;
+            }
+            Chip selectedExpenseCategoryChip = (Chip) this.incomeOrExpenseCategoriesChipGroup.findViewById(categoryOptional.get().getId());
+            selectedExpenseCategoryChip.setChecked(true);
+            selectedExpenseCategoryChip.callOnClick();
+
+            Optional<SubCategory> subCategoryOptional = subCategories.stream()
+                    .filter(subCategory -> subCategory.getName().equals(expense.getSubCategory()))
+                    .findFirst();
+            if (!subCategoryOptional.isPresent()) {
+                return;
+            }
+            Chip selectedSubIncomeCategoryChip = (Chip) this.incomeOrExpenseSubCategoriesChipGroup.findViewById(subCategoryOptional.get().getId());
+            selectedSubIncomeCategoryChip.setChecked(true);
+            selectedSubIncomeCategoryChip.callOnClick();
+        }
+        noteEditText.setText(expense.getNote());
+        amountEditText.setText(expense.getAmount());
+        addButton.setText(R.string.update);
     }
 
     private void initialize() {
@@ -106,10 +181,11 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
         this.noteEditText = binding.noteInputText;
         this.noteLinearLayout = binding.noteLinearLayout;
 
-        this.expense = new Expense();
+        if (this.expense == null) {
+            this.expense = new Expense();
+        }
     }
 
-    //income or expense
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -137,12 +213,12 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
     }
 
     private List<Chip> getIncomeCategoryChips() {
-        List<Category> incomeCategories = categoryRepository.getCategories(CategoryType.INCOME);
+        this.incomeCategories = categoryRepository.getCategories(CategoryType.INCOME);
         return getCategoryChipsWithSubCategoryChips(incomeCategories);
     }
 
     private List<Chip> getExpenseCategoryChips() {
-        List<Category> expenseCategories = categoryRepository.getCategories(CategoryType.EXPENSE);
+        this.expenseCategories = categoryRepository.getCategories(CategoryType.EXPENSE);
         return getCategoryChipsWithSubCategoryChips(expenseCategories);
     }
 
@@ -167,7 +243,7 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
                 expense.setCategory(category.getName());
                 expense.setType(category.getType());
 
-                List<SubCategory> subCategories = categoryRepository.getSubCategories(category.getId());
+                subCategories = categoryRepository.getSubCategories(category.getId());
                 List<Chip> subCategoryChips = subCategories.stream()
                         .map(subCategory -> {
                             Chip subCategoryFilterChip = createFilterChip(subCategory.getId(), subCategory.getName());
