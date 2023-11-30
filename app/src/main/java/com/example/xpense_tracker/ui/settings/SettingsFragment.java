@@ -1,7 +1,6 @@
 package com.example.xpense_tracker.ui.settings;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,10 +10,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.xpense_tracker.R;
+import com.example.xpense_tracker.BottomNavigationActivity;
 import com.example.xpense_tracker.data.Currency;
+import com.example.xpense_tracker.data.LoginDataSource;
+import com.example.xpense_tracker.data.LoginRepository;
 import com.example.xpense_tracker.data.SharedPreferenceService;
 import com.example.xpense_tracker.databinding.FragmentSettingsBinding;
+import com.example.xpense_tracker.ui.login.LoginActivity;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -33,9 +35,22 @@ public class SettingsFragment extends Fragment {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         this.sharedPreferenceService = SharedPreferenceService.getInstance(getContext());
+
         addCurrencyChipListener();
+        addLogoutButtonListener();
         checkSelectedChip();
         return root;
+    }
+
+    private void addLogoutButtonListener() {
+        binding.logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginRepository.getInstance(LoginDataSource.getInstance(getContext())).logout();
+                Intent loginActivity = new Intent(getContext(), LoginActivity.class);
+                startActivity(loginActivity);
+            }
+        });
     }
 
     private void checkSelectedChip() {

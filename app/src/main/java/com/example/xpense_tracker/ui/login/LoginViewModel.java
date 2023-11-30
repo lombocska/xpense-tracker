@@ -55,6 +55,10 @@ public class LoginViewModel extends ViewModel {
         }
     }
 
+    public void logout() {
+        loginRepository.logout();
+    }
+
     // A placeholder username validation check
     private boolean isUserNameValid(String username) {
         if (username == null) {

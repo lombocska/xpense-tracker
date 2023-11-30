@@ -22,7 +22,16 @@ import java.io.IOException;
  */
 public class LoginDataSource extends SQLiteOpenHelper {
 
-    public LoginDataSource(@Nullable Context context) {
+    private static volatile LoginDataSource instance;
+
+    public static LoginDataSource getInstance(Context context) {
+        if (instance == null) {
+            instance = new LoginDataSource(context);
+        }
+        return instance;
+    }
+
+    private LoginDataSource(@Nullable Context context) {
         super(context, DATABASE, null, 1);
         this.getWritableDatabase().execSQL(QueryConstant.CREATE_USERS_TABLE);
     }

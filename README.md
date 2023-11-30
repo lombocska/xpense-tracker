@@ -27,6 +27,24 @@ This feature was implemented with Android Studio Built-in Login Activity. The us
 LoginRepository and LoginDataSource with SQLite db. In AndroidManifests.xml, login activity is exported 
 and get to be the main activity as an activity intent. 
 
+## Home
+
+This screen is intended to show transactions.
+
+
+
+# TODO
+-[ ] category creation, deletion
+- [ ] transaction modification
+-[ ] Dynamic colors 
+- [ ] logout
+- [ ] password encryption
+- [ ] using Result generic class from all of the *DataSource service
+
+# Resources
+
+- https://codelabs.developers.google.com/codelabs/apply-dynamic-color#2
+
 
 
 
