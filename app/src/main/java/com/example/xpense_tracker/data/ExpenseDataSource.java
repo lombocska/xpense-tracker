@@ -129,6 +129,19 @@ public class ExpenseDataSource extends SQLiteOpenHelper {
         return expenses;
     }
 
+    public void createExpense(Expense newExpense) {
+        saveExpense(newExpense);
+    }
+
+    public void delete(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Filter results WHERE "id" = '{id}'
+        String whereClause = COLUMN_NAME_ID + " = ?";
+        String[] whereArgs = {String.valueOf(id)};
+        db.delete(TABLE_NAME, whereClause, whereArgs);
+    }
+
     private void saveExpense(Expense expense) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME_CATEGORY, expense.getCategory());
@@ -141,9 +154,4 @@ public class ExpenseDataSource extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_NAME, null, values);
     }
-
-    public void createExpense(Expense newExpense) {
-        saveExpense(newExpense);
-    }
-
 }

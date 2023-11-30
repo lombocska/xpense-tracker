@@ -3,8 +3,10 @@ package com.example.xpense_tracker.ui.home;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.xpense_tracker.R;
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
  * https://github.com/material-components/material-components-android/blob/master/catalog/java/io/material/catalog/lists/ListsMainDemoFragment.java
  * https://github.com/material-components/material-components-android/blob/master/lib/java/com/google/android/material/lists/res/layout/material_list_item_three_line.xml
  */
-public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
+public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     //in a prod code, ExpenseDTO should be used here
     List<Expense> mItem;
@@ -51,15 +53,32 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-
         bind((ThreeLineItemViewHolder) viewHolder, mItem.get(position));
+    }
 
-        //hinder list clicking action
-        viewHolder.itemView.setOnTouchListener((view, motionEvent) -> {
-            view.onTouchEvent(motionEvent);
-            return true;
+    public void addSwipeListener(RecyclerView recyclerView) {
+
+        //Swipe to Delete
+        ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int itemPosition = viewHolder.getBindingAdapterPosition();
+                Expense deletableExpense = mItem.get(itemPosition);
+                mItem.remove(itemPosition);
+                expenseRepository.deleteExpense(deletableExpense.getId());
+                notifyItemRemoved(itemPosition);
+                Toast.makeText(recyclerView.getContext(), "Deleted: " + deletableExpense.getCategory() + ", " + deletableExpense.getAmount(), Toast.LENGTH_LONG).show();
+            }
+
         });
-}
+        swipeToDismissTouchHelper.attachToRecyclerView(recyclerView);
+    }
 
     public void addExpense(Expense expense) {
         mItem.add(0, expense);
@@ -86,7 +105,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         vh.text.setText(String.format(expense.getAmount().toString()));
         vh.secondary.setText(String.format("%s, %s, %s", expense.getCategory(), expense.getSubCategory(), expense.getNote()));
         vh.tertiary.setText(expense.getCreatedAt().toString());
-        if(CategoryType.INCOME.name().equals(expense.getType())) {
+        if (CategoryType.INCOME.name().equals(expense.getType())) {
             vh.icon.setImageResource(R.drawable.revenue);
         } else {
             vh.icon.setImageResource(R.drawable.earning);

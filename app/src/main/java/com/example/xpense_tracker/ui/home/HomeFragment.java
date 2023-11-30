@@ -120,6 +120,7 @@ public class HomeFragment extends Fragment {
         RecyclerView transactionsListView =
                 (RecyclerView) inflater.inflate(R.layout.fragment_transaction_list, container, false);
 
+        adapter.addSwipeListener(transactionsListView);
         transactionsListView.setLayoutManager(new LinearLayoutManager(getContext()));
         transactionsListView.setAdapter(adapter);
         binding.transactionsMaterialCardView.addView(transactionsListView);

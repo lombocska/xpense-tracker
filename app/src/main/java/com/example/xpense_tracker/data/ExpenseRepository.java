@@ -68,4 +68,7 @@ public class ExpenseRepository {
         return Pair.create(allIncomesOfCurrentMonth, allExpensesOfCurrentMonth);
     }
 
+    public void deleteExpense(int id) {
+        dataSource.delete(id);
+    }
 }
