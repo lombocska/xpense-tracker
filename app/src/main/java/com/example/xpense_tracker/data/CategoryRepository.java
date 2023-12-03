@@ -29,4 +29,8 @@ public class CategoryRepository {
     public List<SubCategory> getSubCategories(int parentCategoryId) {
         return dataSource.getSubCategories(parentCategoryId);
     }
+
+    public void saveCategory(String categoryName, CategoryType type) {
+        dataSource.save(categoryName, type);
+    }
 }

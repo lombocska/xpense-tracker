@@ -26,7 +26,16 @@ import java.util.Map;
 
 public class CategoryDataSource extends SQLiteOpenHelper {
 
-    public CategoryDataSource(@Nullable Context context) {
+    private static volatile CategoryDataSource instance;
+
+    public static CategoryDataSource getInstance(Context context) {
+        if (instance == null) {
+            instance = new CategoryDataSource(context);
+        }
+        return instance;
+    }
+
+    private CategoryDataSource(@Nullable Context context) {
         super(context, DATABASE, null, 1);
         this.getWritableDatabase().execSQL(QueryConstant.DROP_CATEGORY_TABLE);
         this.getWritableDatabase().execSQL(QueryConstant.CREATE_CATEGORY_TABLE);
@@ -110,25 +119,29 @@ public class CategoryDataSource extends SQLiteOpenHelper {
         return categories;
     }
 
+    public void save(String name, CategoryType categoryType) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME_NAME, name);
+        values.put(COLUMN_NAME_TYPE, categoryType.name());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long categoryId = db.insert(TABLE_NAME, null, values);
+
+        //add initial subcategory
+        if (getSubCategories((int) categoryId).size() == 0 ) {
+            addInitialSubCategory(Map.of(name, List.of("Other")), categoryType);
+        }
+    }
+
     private void addInitialIncomeCategory(String... names) {
         for (String name : names) {
-            ContentValues values = new ContentValues();
-            values.put(COLUMN_NAME_NAME, name);
-            values.put(COLUMN_NAME_TYPE, CategoryType.INCOME.name());
-
-            SQLiteDatabase db = this.getWritableDatabase();
-            db.insert(TABLE_NAME, null, values);
+            save(name, CategoryType.INCOME);
         }
     }
 
     private void addInitialExpenseCategory(String... names) {
         for (String name : names) {
-            ContentValues values = new ContentValues();
-            values.put(COLUMN_NAME_NAME, name);
-            values.put(COLUMN_NAME_TYPE, CategoryType.EXPENSE.name());
-
-            SQLiteDatabase db = this.getWritableDatabase();
-            db.insert(TABLE_NAME, null, values);
+            save(name, CategoryType.EXPENSE);
         }
     }
 

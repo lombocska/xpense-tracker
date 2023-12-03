@@ -166,7 +166,7 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
     }
 
     private void initialize() {
-        this.categoryRepository = CategoryRepository.getInstance(new CategoryDataSource(getContext()));
+        this.categoryRepository = CategoryRepository.getInstance(CategoryDataSource.getInstance(getContext()));
         this.expenseRepository = ExpenseRepository.getInstance(ExpenseDataSource.getInstance(getContext()));
 
         this.incomeOrExpenseCategoriesChipGroup = binding.incomeOrExpenseCategoriesChipGroup;

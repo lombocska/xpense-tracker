@@ -11,14 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.xpense_tracker.BottomNavigationActivity;
+import com.example.xpense_tracker.R;
 import com.example.xpense_tracker.data.Currency;
 import com.example.xpense_tracker.data.LoginDataSource;
 import com.example.xpense_tracker.data.LoginRepository;
 import com.example.xpense_tracker.data.SharedPreferenceService;
 import com.example.xpense_tracker.databinding.FragmentSettingsBinding;
+import com.example.xpense_tracker.ui.home.AddExpenseOrIncomeDialogFragment;
 import com.example.xpense_tracker.ui.login.LoginActivity;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +43,17 @@ public class SettingsFragment extends Fragment {
         addCurrencyChipListener();
         addLogoutButtonListener();
         checkSelectedChip();
+        addAddCategoryButtonListener(root);
         return root;
+    }
+
+    private void addAddCategoryButtonListener(View root) {
+        MaterialButton addNewCategoryButton = root.findViewById(R.id.addNewCategoryButton);
+        addNewCategoryButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                CategoryDialogFragment.newInstance().show(getChildFragmentManager(), "CategoryDialogFragment");
+            }
+        });
     }
 
     private void addLogoutButtonListener() {

@@ -26,11 +26,11 @@
         android:padding="20dp"
         android:text="@string/currency"
         android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="@+id/materialCardView"
+        app:layout_constraintStart_toStartOf="@+id/currencyMaterialCardView"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView"
+        android:id="@+id/currencyMaterialCardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:tooltipText="@string/currency"
@@ -42,48 +42,70 @@
             android:id="@+id/currencyChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:singleSelection="true"
-            android:clickable="true"
             android:layout_gravity="center"
+            android:clickable="true"
             android:orientation="horizontal"
-            android:textAlignment="center">
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/HUF"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:text="@string/huf"/>
+                android:text="@string/huf" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/USD"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:text="@string/usd"/>
+                android:text="@string/usd" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/EUR"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:text="@string/eur"/>
+                android:text="@string/eur" />
         </com.google.android.material.chip.ChipGroup>
-
 
     </com.google.android.material.card.MaterialCardView>
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/category"
+        style="@style/MaterialAlertDialog.Material3.Title.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:padding="20dp"
+        android:text="@string/category"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/currency"
+        app:layout_constraintTop_toBottomOf="@+id/currencyMaterialCardView" />
     <Button
-        android:id="@+id/logout"
+        android:id="@+id/addNewCategoryButton"
+        style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/addnewcat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category" />
+
+    <Button
+        android:id="@+id/logout"
         style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/logout_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+        app:layout_constraintTop_toBottomOf="@+id/currencyMaterialCardView"
         app:layout_constraintVertical_bias="0.968" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

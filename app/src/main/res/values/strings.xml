@@ -27,6 +27,9 @@
     <string name="stat_title">STAT</string>
     <string name="settings_title">SETTINGS</string>
     <string name="currency">currency</string>
+    <string name="category">category</string>
+    <string name="category_name">Category Name</string>
+    <string name="addnewcat">Add new Category</string>
     <string name="huf">HUF</string>
     <string name="usd">USD</string>
     <string name="eur">EUR</string>
