@@ -119,6 +119,32 @@ public class CategoryDataSource extends SQLiteOpenHelper {
         return categories;
     }
 
+    public List<SubCategory> getSubCategories(CategoryType type) {
+        List<SubCategory> categories = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        // Filter results WHERE "parentId" = 'something'
+        String selection = CategoryContract.SubCategoryContent.COLUMN_NAME_TYPE + " = ?";
+        String[] selectionArgs = {type.name()};
+        String sortOrder = CategoryContract.SubCategoryContent.COLUMN_NAME_ID + " ASC";
+        Cursor cursor = db.query(
+                CategoryContract.SubCategoryContent.TABLE_NAME,        // The table to query
+                null,              // The array of columns to return (pass null to get all)
+                selection,         // The columns for the WHERE clause
+                selectionArgs,     // The values for the WHERE clause
+                null,              // don't group the rows
+                null,              // don't filter by row groups
+                sortOrder          // The sort order
+        );
+        if (cursor.moveToFirst()) {
+            do {
+                SubCategory category = new SubCategory(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
+                categories.add(category);
+            } while (cursor.moveToNext());
+        }
+        return categories;
+    }
+
     public void save(String name, CategoryType categoryType) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME_NAME, name);
@@ -145,7 +171,7 @@ public class CategoryDataSource extends SQLiteOpenHelper {
         }
     }
 
-    private void addInitialSubCategory(Map<String, List<String>> categoryWithSubCategories, CategoryType type) {
+    public void addInitialSubCategory(Map<String, List<String>> categoryWithSubCategories, CategoryType type) {
         categoryWithSubCategories.entrySet().forEach(entry -> {
             SQLiteDatabase db = this.getWritableDatabase();
             // Filter results WHERE "name" = 'something'

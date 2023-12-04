@@ -5,6 +5,7 @@ import com.example.xpense_tracker.data.model.CategoryType;
 import com.example.xpense_tracker.data.model.SubCategory;
 
 import java.util.List;
+import java.util.Map;
 
 public class CategoryRepository {
 
@@ -30,7 +31,15 @@ public class CategoryRepository {
         return dataSource.getSubCategories(parentCategoryId);
     }
 
+    public List<SubCategory> getSubCategories(CategoryType type) {
+        return dataSource.getSubCategories(type);
+    }
+
     public void saveCategory(String categoryName, CategoryType type) {
         dataSource.save(categoryName, type);
+    }
+
+    public void saveSubCategory(Map<String, List<String>> categoryWithSubCategories, CategoryType type) {
+        dataSource.addInitialSubCategory(categoryWithSubCategories, type);
     }
 }

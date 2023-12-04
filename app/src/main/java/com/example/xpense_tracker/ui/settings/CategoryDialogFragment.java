@@ -16,19 +16,17 @@ import com.example.xpense_tracker.data.ExpenseRepository;
 import com.example.xpense_tracker.data.model.Category;
 import com.example.xpense_tracker.data.model.CategoryType;
 import com.example.xpense_tracker.databinding.FragmentCategoryDialogListDialogBinding;
+import com.example.xpense_tracker.databinding.FragmentFilterChipBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-/**
- * <p>A fragment that shows a list of items as a modal bottom sheet.</p>
- * <p>You can show this modal bottom sheet from your activity like this:</p>
- * <pre>
- *     CategoryDialogFragment.newInstance(30).show(getSupportFragmentManager(), "dialog");
- * </pre>
- */
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class CategoryDialogFragment extends BottomSheetDialogFragment {
 
     private FragmentCategoryDialogListDialogBinding binding;
@@ -58,10 +56,13 @@ public class CategoryDialogFragment extends BottomSheetDialogFragment {
         this.addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String categoryName = categoryNameText.getText().toString();
+                if (categoryName == null || categoryName.trim().isEmpty()) {
+                    return;
+                }
                 int checkedChipId = incomeOrExpenseChipGroup.getCheckedChipId();
                 Chip selectedChip = (Chip) incomeOrExpenseChipGroup.findViewById(checkedChipId);
                 String categoryType = selectedChip.getText().toString();
-                String categoryName = categoryNameText.getText().toString();
 
                 categoryRepository.saveCategory(categoryName, CategoryType.valueOf(categoryType));
                 dismiss();

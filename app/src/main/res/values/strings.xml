@@ -28,8 +28,11 @@
     <string name="settings_title">SETTINGS</string>
     <string name="currency">currency</string>
     <string name="category">category</string>
+    <string name="subcategory">subcategory</string>
     <string name="category_name">Category Name</string>
+    <string name="subcategory_name">Subcategory Name</string>
     <string name="addnewcat">Add new Category</string>
+    <string name="addnewsubcat">Add new Subcategory</string>
     <string name="huf">HUF</string>
     <string name="usd">USD</string>
     <string name="eur">EUR</string>

@@ -10,28 +10,37 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.xpense_tracker.BottomNavigationActivity;
 import com.example.xpense_tracker.R;
+import com.example.xpense_tracker.data.CategoryDataSource;
+import com.example.xpense_tracker.data.CategoryRepository;
 import com.example.xpense_tracker.data.Currency;
 import com.example.xpense_tracker.data.LoginDataSource;
 import com.example.xpense_tracker.data.LoginRepository;
 import com.example.xpense_tracker.data.SharedPreferenceService;
+import com.example.xpense_tracker.data.model.Category;
+import com.example.xpense_tracker.data.model.CategoryType;
+import com.example.xpense_tracker.data.model.SubCategory;
+import com.example.xpense_tracker.databinding.FragmentFilterChipBinding;
 import com.example.xpense_tracker.databinding.FragmentSettingsBinding;
-import com.example.xpense_tracker.ui.home.AddExpenseOrIncomeDialogFragment;
 import com.example.xpense_tracker.ui.login.LoginActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 // https://developer.android.com/training/data-storage/shared-preferences
 public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding binding;
     private SharedPreferenceService sharedPreferenceService;
+    private List<Category> incomeCategories = new ArrayList<>();
+    private List<Category> expenseCategories = new ArrayList<>();
+    private List<SubCategory> subCategories = new ArrayList<>();
+    private CategoryRepository categoryRepository;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -39,12 +48,68 @@ public class SettingsFragment extends Fragment {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         this.sharedPreferenceService = SharedPreferenceService.getInstance(getContext());
+        this.categoryRepository = CategoryRepository.getInstance(CategoryDataSource.getInstance(getContext()));
 
         addCurrencyChipListener();
         addLogoutButtonListener();
         checkSelectedChip();
         addAddCategoryButtonListener(root);
+        addAddSubCategoryButtonListener(root);
+
+        showExistingCategories();
+        showExistingSubCategories();
         return root;
+    }
+
+    private void showExistingSubCategories() {
+        getAllIncomeSubCategoriesChips().forEach(income -> binding.incomeSubCategoryChipGroup.addView(income));
+        getAllExpenseSubCategoriesChips().forEach(expense -> binding.expenseSubCategoryChipGroup.addView(expense));
+    }
+
+    private void showExistingCategories() {
+        getIncomeCategoryChips().forEach(income -> binding.incomeCategoryChipGroup.addView(income));
+        getExpenseCategoryChips().forEach(expense -> binding.expenseCategoryChipGroup.addView(expense));
+    }
+
+    private List<Chip> getAllIncomeSubCategoriesChips() {
+        return categoryRepository.getSubCategories(CategoryType.INCOME)
+                .stream()
+                .map(subCategory -> createFilterChip(subCategory.getId(), subCategory.getName()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Chip> getAllExpenseSubCategoriesChips() {
+        return categoryRepository.getSubCategories(CategoryType.EXPENSE)
+                .stream()
+                .map(subCategory -> createFilterChip(subCategory.getId(), subCategory.getName()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Chip> getIncomeCategoryChips() {
+        this.incomeCategories = categoryRepository.getCategories(CategoryType.INCOME);
+        return getCategoryChipsWithSubCategoryChips(incomeCategories);
+    }
+
+    private List<Chip> getExpenseCategoryChips() {
+        this.expenseCategories = categoryRepository.getCategories(CategoryType.EXPENSE);
+        return getCategoryChipsWithSubCategoryChips(expenseCategories);
+    }
+
+    @NonNull
+    private List<Chip> getCategoryChipsWithSubCategoryChips(List<Category> categories) {
+        return categories.stream()
+                .map(category -> {
+                    int id = category.getId();
+                    return createFilterChip(id, category.getName());
+                })
+                .collect(Collectors.toList());
+    }
+
+    private Chip createFilterChip(int id, String name) {
+        Chip chip = FragmentFilterChipBinding.inflate(getLayoutInflater()).getRoot();
+        chip.setId(id);
+        chip.setText(name);
+        return chip;
     }
 
     private void addAddCategoryButtonListener(View root) {
@@ -52,6 +117,15 @@ public class SettingsFragment extends Fragment {
         addNewCategoryButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 CategoryDialogFragment.newInstance().show(getChildFragmentManager(), "CategoryDialogFragment");
+            }
+        });
+    }
+
+    private void addAddSubCategoryButtonListener(View root) {
+        MaterialButton addNewSubCategoryButton = root.findViewById(R.id.addNewSubCategoryButton);
+        addNewSubCategoryButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SubCategoryDialogFragment.newInstance().show(getChildFragmentManager(), "SubCategoryDialogFragment");
             }
         });
     }
