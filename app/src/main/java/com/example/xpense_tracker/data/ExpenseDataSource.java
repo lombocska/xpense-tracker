@@ -1,6 +1,8 @@
 package com.example.xpense_tracker.data;
 
 import static com.example.xpense_tracker.data.QueryConstant.DATABASE;
+import static com.example.xpense_tracker.data.model.CategoryContract.CategoryContent.DEFAULT_CATEGORY;
+import static com.example.xpense_tracker.data.model.CategoryContract.SubCategoryContent.DEFAULT_SUBCATEGORY;
 import static com.example.xpense_tracker.data.model.ExpenseContract.TransactionContent.COLUMN_NAME_AMOUNT;
 import static com.example.xpense_tracker.data.model.ExpenseContract.TransactionContent.COLUMN_NAME_CATEGORY;
 import static com.example.xpense_tracker.data.model.ExpenseContract.TransactionContent.COLUMN_NAME_CREATED_AT;
@@ -46,8 +48,8 @@ public class ExpenseDataSource extends SQLiteOpenHelper {
                 new Expense("Income", "Rate", CategoryType.INCOME.name(), LocalDate.now(), "CocaColastocks", "1000"),
                 new Expense("Income", "Sale", CategoryType.INCOME.name(), LocalDate.now(),  "shoes", "400"),
                 new Expense("Income", "Sale", CategoryType.INCOME.name(), LocalDate.now(),  "shoes", "500"),
-                new Expense("Investment", "Other", CategoryType.INCOME.name(), LocalDate.now(),  "shoes", "700"),
-                new Expense("Other", "Other", CategoryType.INCOME.name(), LocalDate.now(),  "shoes", "800"),
+                new Expense("Investment", DEFAULT_SUBCATEGORY, CategoryType.INCOME.name(), LocalDate.now(),  "shoes", "700"),
+                new Expense(DEFAULT_CATEGORY, DEFAULT_SUBCATEGORY, CategoryType.INCOME.name(), LocalDate.now(),  "shoes", "800"),
                 new Expense("Income", "Sale", CategoryType.INCOME.name(), LocalDate.now(),  "shoes", "10"),
                 new Expense("Income", "Rental", CategoryType.INCOME.name(), LocalDate.of(2023, 11, 1),  "shoes", "500")
         ).forEach(this::saveExpense);

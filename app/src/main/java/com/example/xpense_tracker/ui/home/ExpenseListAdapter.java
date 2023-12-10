@@ -50,6 +50,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
+        mItem = getAllExpense();
         return ThreeLineItemViewHolder.create(parent);
     }
 

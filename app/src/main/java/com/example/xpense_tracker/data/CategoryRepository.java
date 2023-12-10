@@ -40,6 +40,18 @@ public class CategoryRepository {
     }
 
     public void saveSubCategory(Map<String, List<String>> categoryWithSubCategories, CategoryType type) {
-        dataSource.addInitialSubCategory(categoryWithSubCategories, type);
+        dataSource.saveSubCategory(categoryWithSubCategories, type);
+    }
+
+    public void deleteCategory(Category category) {
+        dataSource.delete(category);
+    }
+
+    public void deleteSubCategory(String subCategoryName) {
+        dataSource.delete(subCategoryName);
+    }
+
+    public void update(int categoryId, String categoryName) {
+        dataSource.update(categoryId, categoryName);
     }
 }

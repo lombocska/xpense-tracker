@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.settings.SettingsFragment">
+    android:id="@+id/settingsFragment"
+    tools:context=".ui.settings.SettingsFragment"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -27,7 +29,7 @@
             style="@style/MaterialAlertDialog.Material3.Title.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="20dp"
+            android:paddingVertical="15dp"
             android:text="@string/currency"
             android:textSize="20dp"
             app:layout_constraintStart_toStartOf="@+id/currencyMaterialCardView"
@@ -84,27 +86,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="2dp"
-            android:padding="20dp"
+            android:paddingVertical="15dp"
             android:text="@string/category"
             android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="@+id/currency"
+            app:layout_constraintStart_toStartOf="@id/category"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/currencyMaterialCardView" />
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/incomeText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="10dp"
+            android:text="@string/income"
+            app:layout_constraintTop_toBottomOf="@+id/category" />
+        />
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/incomeCategoryMaterialCardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="20dp"
             android:tooltipText="@string/category"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/category">
+            app:layout_constraintTop_toBottomOf="@+id/incomeText">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/incomeCategoryChipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:clickable="true"
                 android:orientation="horizontal"
                 android:padding="20dp"
@@ -112,21 +121,27 @@
                 app:singleSelection="true" />
         </com.google.android.material.card.MaterialCardView>
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/expenseText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="10dp"
+            android:text="@string/expense"
+            app:layout_constraintTop_toBottomOf="@+id/incomeCategoryMaterialCardView"/>
+        />
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/expenseCategoryMaterialCardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="20dp"
             android:tooltipText="@string/category"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/incomeCategoryMaterialCardView">
+            app:layout_constraintTop_toBottomOf="@+id/expenseText">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/expenseCategoryChipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:clickable="true"
                 android:orientation="horizontal"
                 android:padding="20dp"
@@ -138,77 +153,17 @@
             android:id="@+id/addNewCategoryButton"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/addnewcat"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/expenseCategoryMaterialCardView" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/subcategory"
-            style="@style/MaterialAlertDialog.Material3.Title.Text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:text="@string/subcategory"
-            android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="@+id/addNewCategoryButton"
-            app:layout_constraintTop_toBottomOf="@+id/addNewCategoryButton" />
-
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/incomeSubCategoryMaterialCardView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:tooltipText="@string/category"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/subcategory">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/incomeSubCategoryChipGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:clickable="true"
-                android:orientation="horizontal"
-                android:padding="20dp"
-                android:textAlignment="center"
-                app:singleSelection="true" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/expenseSubCategoryMaterialCardView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:tooltipText="@string/category"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/incomeSubCategoryMaterialCardView">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/expenseSubCategoryChipGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:clickable="true"
-                android:orientation="horizontal"
-                android:padding="20dp"
-                android:textAlignment="center"
-                app:singleSelection="true" />
-        </com.google.android.material.card.MaterialCardView>
 
         <Button
             android:id="@+id/addNewSubCategoryButton"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/addnewsubcat"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/expenseSubCategoryMaterialCardView" />
+            app:layout_constraintTop_toBottomOf="@+id/addNewCategoryButton"/>
 
         <Button
             android:id="@+id/logout"

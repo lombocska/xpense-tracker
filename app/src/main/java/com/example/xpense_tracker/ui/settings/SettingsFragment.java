@@ -20,8 +20,8 @@ import com.example.xpense_tracker.data.SharedPreferenceService;
 import com.example.xpense_tracker.data.model.Category;
 import com.example.xpense_tracker.data.model.CategoryType;
 import com.example.xpense_tracker.data.model.SubCategory;
-import com.example.xpense_tracker.databinding.FragmentFilterChipBinding;
 import com.example.xpense_tracker.databinding.FragmentSettingsBinding;
+import com.example.xpense_tracker.ui.UIUtil;
 import com.example.xpense_tracker.ui.login.LoginActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
@@ -52,37 +52,19 @@ public class SettingsFragment extends Fragment {
 
         addCurrencyChipListener();
         addLogoutButtonListener();
-        checkSelectedChip();
+        checkSelectedCurrencyChip();
         addAddCategoryButtonListener(root);
         addAddSubCategoryButtonListener(root);
 
         showExistingCategories();
-        showExistingSubCategories();
         return root;
     }
 
-    private void showExistingSubCategories() {
-        getAllIncomeSubCategoriesChips().forEach(income -> binding.incomeSubCategoryChipGroup.addView(income));
-        getAllExpenseSubCategoriesChips().forEach(expense -> binding.expenseSubCategoryChipGroup.addView(expense));
-    }
-
-    private void showExistingCategories() {
+    public void showExistingCategories() {
+        binding.incomeCategoryChipGroup.removeAllViews();
+        binding.expenseCategoryChipGroup.removeAllViews();
         getIncomeCategoryChips().forEach(income -> binding.incomeCategoryChipGroup.addView(income));
         getExpenseCategoryChips().forEach(expense -> binding.expenseCategoryChipGroup.addView(expense));
-    }
-
-    private List<Chip> getAllIncomeSubCategoriesChips() {
-        return categoryRepository.getSubCategories(CategoryType.INCOME)
-                .stream()
-                .map(subCategory -> createFilterChip(subCategory.getId(), subCategory.getName()))
-                .collect(Collectors.toList());
-    }
-
-    private List<Chip> getAllExpenseSubCategoriesChips() {
-        return categoryRepository.getSubCategories(CategoryType.EXPENSE)
-                .stream()
-                .map(subCategory -> createFilterChip(subCategory.getId(), subCategory.getName()))
-                .collect(Collectors.toList());
     }
 
     private List<Chip> getIncomeCategoryChips() {
@@ -100,17 +82,22 @@ public class SettingsFragment extends Fragment {
         return categories.stream()
                 .map(category -> {
                     int id = category.getId();
-                    return createFilterChip(id, category.getName());
+                    Chip categoryChip = UIUtil.createFilterChip(getLayoutInflater(), id, category.getName());
+                    addCategoryListener(categoryChip, category);
+                    return categoryChip;
                 })
                 .collect(Collectors.toList());
     }
 
-    private Chip createFilterChip(int id, String name) {
-        Chip chip = FragmentFilterChipBinding.inflate(getLayoutInflater()).getRoot();
-        chip.setId(id);
-        chip.setText(name);
-        return chip;
+    private void addCategoryListener(Chip categoryChip, Category category) {
+        categoryChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CategoryDialogFragment.newInstanceWithUpdate(category).show(getChildFragmentManager(), "CategoryDialogFragment");
+            }
+        });
     }
+
 
     private void addAddCategoryButtonListener(View root) {
         MaterialButton addNewCategoryButton = root.findViewById(R.id.addNewCategoryButton);
@@ -141,7 +128,7 @@ public class SettingsFragment extends Fragment {
         });
     }
 
-    private void checkSelectedChip() {
+    private void checkSelectedCurrencyChip() {
         String currency = sharedPreferenceService.getCurrency();
         ChipGroup currencyChipGroup = binding.currencyChip;
         for (int i = 0; i < currencyChipGroup.getChildCount(); i++) {

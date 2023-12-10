@@ -8,6 +8,7 @@ public final class CategoryContract {
 
     /* Inner class that defines the table contents */
     public static class CategoryContent {
+        public static final String DEFAULT_CATEGORY = "Other";
         public static final String TABLE_NAME = "category";
         public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_NAME = "name";
@@ -16,6 +17,7 @@ public final class CategoryContract {
 
     /* Inner class that defines the table contents */
     public static class SubCategoryContent {
+        public static final String DEFAULT_SUBCATEGORY = "Other";
         public static final String TABLE_NAME = "sub_category";
         public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_NAME = "name";

@@ -25,6 +25,7 @@ import com.example.xpense_tracker.data.model.Expense;
 import com.example.xpense_tracker.data.model.SubCategory;
 import com.example.xpense_tracker.databinding.FragmentAddExpenseOrIncomeDialogListDialogBinding;
 import com.example.xpense_tracker.databinding.FragmentFilterChipBinding;
+import com.example.xpense_tracker.ui.UIUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -230,7 +231,7 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
     }
 
     private Chip getCategoryChip(Category category) {
-        Chip categoryChip = createFilterChip(category.getId(), category.getName());
+        Chip categoryChip = UIUtil.createFilterChip(getLayoutInflater(),category.getId(), category.getName());
         addCategoryChipListener(category, categoryChip);
         return categoryChip;
     }
@@ -246,7 +247,7 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
                 subCategories = categoryRepository.getSubCategories(category.getId());
                 List<Chip> subCategoryChips = subCategories.stream()
                         .map(subCategory -> {
-                            Chip subCategoryFilterChip = createFilterChip(subCategory.getId(), subCategory.getName());
+                            Chip subCategoryFilterChip = UIUtil.createFilterChip(getLayoutInflater(), subCategory.getId(), subCategory.getName());
                             addSubCategoryListener(subCategoryFilterChip);
                             return subCategoryFilterChip;
                         })
@@ -339,13 +340,6 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
         calendarButton.setVisibility(GONE);
         amountLinearLayout.setVisibility(GONE);
         noteLinearLayout.setVisibility(GONE);
-    }
-
-    private Chip createFilterChip(int id, String name) {
-        Chip chip = FragmentFilterChipBinding.inflate(getLayoutInflater()).getRoot();
-        chip.setId(id);
-        chip.setText(name);
-        return chip;
     }
 
 }

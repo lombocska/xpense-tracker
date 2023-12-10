@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/category_dialog"
+    android:id="@+id/subcategory_dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
@@ -66,18 +66,17 @@
     </com.google.android.material.chip.ChipGroup>
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/incomeOrExpenseCategoriesChipGroup"
+        android:id="@+id/categoriesChipGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:paddingHorizontal="24dp"
+        app:singleSelection="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/incomeOrExpenseChipGroup"
-        app:selectionRequired="true"
-        app:singleSelection="true" />
-
+        />
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/categoryNameTextLayout"
+        android:id="@+id/subcategoryNameTextLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -85,7 +84,7 @@
         android:paddingVertical="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/incomeOrExpenseCategoriesChipGroup">
+        app:layout_constraintTop_toBottomOf="@+id/categoriesChipGroup">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/subcategoryNameText"
@@ -112,7 +111,7 @@
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryNameTextLayout"
+        app:layout_constraintTop_toBottomOf="@+id/subcategoryNameTextLayout"
         app:layout_constraintVertical_bias="0.127" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

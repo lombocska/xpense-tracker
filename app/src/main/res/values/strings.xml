@@ -18,8 +18,9 @@
     <string name="all">ALL</string>
     <string name="amount">amount</string>
     <string name="note">note</string>
-    <string name="add">ADD</string>
-    <string name="update">UPDATE</string>
+    <string name="add">Add</string>
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
     <string name="filterdate">DATE RANGE</string>
     <string name="date_picker_title">Pick a date for your expense</string>
     <string name="date_range_picker_title">Select a date range</string>
@@ -32,7 +33,9 @@
     <string name="category_name">Category Name</string>
     <string name="subcategory_name">Subcategory Name</string>
     <string name="addnewcat">Add new Category</string>
+    <string name="deletecat">Delete category</string>
     <string name="addnewsubcat">Add new Subcategory</string>
+    <string name="deletesubcat">Delete selected subcategories</string>
     <string name="huf">HUF</string>
     <string name="usd">USD</string>
     <string name="eur">EUR</string>
