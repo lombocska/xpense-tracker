@@ -59,15 +59,14 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         bind((ThreeLineItemViewHolder) viewHolder, mItem.get(position));
         //open AddExpenseOrIncomeDialogFragment for update
-        viewHolder.itemView.setOnTouchListener(new View.OnTouchListener() {
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View v) {
                 int itemPosition = viewHolder.getBindingAdapterPosition();
                 Expense updatableExpense = mItem.get(itemPosition);
                 AddExpenseOrIncomeDialogFragment
                         .newInstanceWithUpdate(updatableExpense)
                         .show(((FragmentActivity) v.getContext()).getSupportFragmentManager(), "AddExpenseOrIncomeDialogFragment for update");
-                return false;
             }
         });
     }
@@ -101,7 +100,6 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         mItem.sort(sortComparatorByDate());
         notifyDataSetChanged();
     }
-
 
     public void filter(String filterCategoryName) {
         List<Expense> allExpense = getAllExpense();

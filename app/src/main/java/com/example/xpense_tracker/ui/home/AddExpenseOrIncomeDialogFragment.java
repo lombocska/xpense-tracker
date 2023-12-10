@@ -310,7 +310,8 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
                     expenseRepository.addExpense(expense);
                     ExpenseListAdapter.getInstance(getContext()).addExpense(expense);
                     dismiss();
-                    Toast.makeText(getContext(), "Added new expense with amount " + amountEditText.getText(), Toast.LENGTH_LONG).show();
+                    String suffix = isUpdate ? "Updated " : "Added new ";
+                    Toast.makeText(getContext(), suffix + "expense with amount " + amountEditText.getText(), Toast.LENGTH_LONG).show();
                 }
             }
         });

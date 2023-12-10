@@ -32,7 +32,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SwipeListener {
 
     private FragmentHomeBinding binding;
     private ExpenseListAdapter adapter;
@@ -53,8 +53,18 @@ public class HomeFragment extends Fragment {
         addAddButtonListener(root);
         addCategoryTypeFilterListener();
         addDateRangeFilterListener();
-
+        registerAdapterOnChangeListener();
         return root;
+    }
+
+    private void registerAdapterOnChangeListener() {
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                setMonthlyState();
+            }
+        });
     }
 
     private void setMonthlyState() {
@@ -130,5 +140,10 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onSwipe() {
+        setMonthlyState();
     }
 }
