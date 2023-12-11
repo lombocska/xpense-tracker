@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.dashboard.StatisticFragment">
+    tools:context=".ui.statistic.StatisticFragment">
 
     <!--    scrollview can have only one child-->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,11 +42,19 @@
         </LinearLayout>
 
         <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/barChart"
+            android:id="@+id/lastMonthBarChart"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pieChartLayout" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/last6MonthBarChart"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lastMonthBarChart" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

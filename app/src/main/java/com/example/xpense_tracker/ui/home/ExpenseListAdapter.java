@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.xpense_tracker.R;
 import com.example.xpense_tracker.data.ExpenseDataSource;
 import com.example.xpense_tracker.data.ExpenseRepository;
+import com.example.xpense_tracker.data.SharedPreferenceService;
 import com.example.xpense_tracker.data.model.CategoryType;
 import com.example.xpense_tracker.data.model.Expense;
 
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
  */
 public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private final SharedPreferenceService sharedPreferenceService;
     //in a prod code, ExpenseDTO should be used here
     List<Expense> mItem;
     private static volatile ExpenseListAdapter instance;
@@ -45,6 +47,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private ExpenseListAdapter(Context context) {
         expenseRepository = ExpenseRepository.getInstance(ExpenseDataSource.getInstance(context));
         List<Expense> allExpense = getAllExpense();
+        this.sharedPreferenceService = SharedPreferenceService.getInstance(context);
         mItem = allExpense;
     }
 
@@ -116,7 +119,7 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void bind(ThreeLineItemViewHolder vh, Expense expense) {
-        vh.text.setText(String.format(expense.getAmount().toString()));
+        vh.text.setText(String.format(sharedPreferenceService.applySelectedCurrency(Integer.valueOf(expense.getAmount())).toString()));
         vh.secondary.setText(String.format("%s, %s, %s", expense.getCategory(), expense.getSubCategory(), expense.getNote()));
         vh.tertiary.setText(expense.getCreatedAt().toString());
         if (CategoryType.INCOME.name().equals(expense.getType())) {

@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.xpense_tracker.ui.dashboard.StatisticFragment"
+        android:name="com.example.xpense_tracker.ui.statistic.StatisticFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_statistic" />
 

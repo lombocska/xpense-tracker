@@ -1,6 +1,4 @@
-package com.example.xpense_tracker.ui.dashboard;
-
-import static com.example.xpense_tracker.ui.home.ExpenseListAdapter.sortComparatorByDate;
+package com.example.xpense_tracker.ui.statistic;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,20 +12,24 @@ import androidx.fragment.app.Fragment;
 import com.example.xpense_tracker.data.ExpenseDataSource;
 import com.example.xpense_tracker.data.ExpenseRepository;
 import com.example.xpense_tracker.data.model.CategoryType;
-import com.example.xpense_tracker.data.model.Expense;
 import com.example.xpense_tracker.databinding.FragmentStatisticBinding;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.math.BigDecimal;
+import java.time.YearMonth;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -38,51 +40,47 @@ public class StatisticFragment extends Fragment {
     public static final String EXPENSE = CategoryType.EXPENSE.name();
     private FragmentStatisticBinding binding;
     private ExpenseRepository expenseRepository;
+    private PieChart incomePieChart;
+    private PieChart expensePieChart;
+    private BarChart last6MonthBarChart;
+    private BarChart lastMonthBarChart;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentStatisticBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
         expenseRepository = ExpenseRepository.getInstance(ExpenseDataSource.getInstance(getContext()));
 
-        PieChart incomePieChart = binding.incomePieChart;
-        PieChart expensePieChart = binding.expensePeChart;
-        BarChart expenseBarChartByMonth = binding.barChart;
+        initialize();
 
         ExpensePieChart.showPieChart(incomePieChart, getIncomeAmountPerCategoryType(), INCOME);
         ExpensePieChart.showPieChart(expensePieChart, getExpenseAmountPerCategoryType(), EXPENSE);
-        GroupedBarChart.showBarChart(getLast6MonthIncome(), getLast6MonthExpense(), expenseBarChartByMonth);
-        return root;
+        GroupedBarChart.showLastSixMonthBarChart(last6MonthBarChart, getLast6MonthIncome(), getLast6MonthExpense());
+        GroupedBarChart.showLastMonthBarChart(lastMonthBarChart, getLastMonthIncome(), getLastMonthExpense());
+        return binding.getRoot();
     }
 
-    private List<BigDecimal> getLast6MonthExpense() {
-        List<Expense> allExpenses = expenseRepository.getExpenses();
-        allExpenses.sort(sortComparatorByDate());
-
-        if (allExpenses.size() < 7) {
-            return allExpenses.stream().map(e -> new BigDecimal(e.getAmount()))
-                    .collect(Collectors.toList());
-        } else {
-            return allExpenses.subList(allExpenses.size() - 7, allExpenses.size() - 1)
-                    .stream().map(e -> new BigDecimal(e.getAmount()))
-                    .collect(Collectors.toList());
-        }
+    private void initialize() {
+        incomePieChart = binding.incomePieChart;
+        expensePieChart = binding.expensePeChart;
+        last6MonthBarChart = binding.last6MonthBarChart;
+        lastMonthBarChart = binding.lastMonthBarChart;
     }
 
-    private List<BigDecimal> getLast6MonthIncome() {
-        List<Expense> allIncomes = expenseRepository.getIncomes();
-        allIncomes.sort(sortComparatorByDate());
+    private List<Integer> getLast6MonthExpense() {
+        return expenseRepository.getLast6MonthExpensesByMonth();
+    }
 
-        if (allIncomes.size() < 7) {
-            return allIncomes.stream().map(e -> new BigDecimal(e.getAmount()))
-                    .collect(Collectors.toList());
-        } else {
-            return allIncomes.subList(allIncomes.size() - 7, allIncomes.size() - 1)
-                    .stream().map(e -> new BigDecimal(e.getAmount()))
-                    .collect(Collectors.toList());
-        }
+    private List<Integer> getLast6MonthIncome() {
+        return expenseRepository.getLast6MonthIncomesByMonth();
+    }
+
+    private List<Integer> getLastMonthIncome() {
+        return expenseRepository.getCurrentMonthIncomesDayByDay();
+    }
+
+    private List<Integer> getLastMonthExpense() {
+        return expenseRepository.getCurrentMonthExpensesDayByDay();
     }
 
     private Map<String, Integer> getIncomeAmountPerCategoryType() {
@@ -102,7 +100,9 @@ public class StatisticFragment extends Fragment {
     private static class GroupedBarChart {
 
         //source: https://medium.com/@clyeung0714/using-mpandroidchart-for-android-application-barchart-540a55b4b9ef
-        private static void showBarChart(List<BigDecimal> incomeByMonth, List<BigDecimal> expenseByMonth, BarChart expenseBarChartByMonth) {
+        private static void showLastSixMonthBarChart(BarChart expenseBarChartByMonth,
+                                                     List<Integer> incomeByMonth,
+                                                     List<Integer> expenseByMonth) {
             List<BarEntry> incomesFor6Month = IntStream.range(0, incomeByMonth.size())
                     .mapToObj(i -> new BarEntry(i, incomeByMonth.get(i).floatValue()))
                     .collect(Collectors.toList());
@@ -127,7 +127,57 @@ public class StatisticFragment extends Fragment {
             expenseBarChartByMonth.setData(data);
             data.setBarWidth(barWidth); // set the width of each bar
             expenseBarChartByMonth.groupBars(0f, groupSpace, barSpace); // perform the "explicit" grouping
+
+            expenseBarChartByMonth.getXAxis().setValueFormatter(new IndexAxisValueFormatter(getLastSixMonthShortName()));
+            Description desc = new Description();
+            desc.setText("Last 6 month incomes and expenses.");
+            expenseBarChartByMonth.setDescription(desc);
+
             expenseBarChartByMonth.invalidate();
+        }
+
+        private static void showLastMonthBarChart(BarChart expenseBarChartByMonth,
+                                                  List<Integer> incomeOfLastMonthDays,
+                                                  List<Integer> expenseOfLastMonthDays) {
+            List<BarEntry> incomesForMonth = IntStream.range(0, incomeOfLastMonthDays.size())
+                    .mapToObj(i -> new BarEntry(i+1, incomeOfLastMonthDays.get(i).floatValue()))
+                    .collect(Collectors.toList());
+
+            List<BarEntry> expensesForMonth = IntStream.range(0, expenseOfLastMonthDays.size())
+                    .mapToObj(i -> new BarEntry(i+1, expenseOfLastMonthDays.get(i).floatValue()))
+                    .collect(Collectors.toList());
+            String incomeTitle = "Income";
+            String expenseTitle = "Expense";
+
+            //grouped barchart
+            BarDataSet barDataSet = new BarDataSet(incomesForMonth, incomeTitle);
+            barDataSet.setColors(Color.parseColor("#7b1113"));
+            BarDataSet barDataSet2 = new BarDataSet(expensesForMonth, expenseTitle);
+            barDataSet2.setColors(Color.parseColor("#6E8B3D"));
+
+            float groupSpace = 0.06f;
+            float barSpace = 0.02f; // x2 dataset
+            float barWidth = 0.45f; // x2 dataset
+            // (0.02 + 0.45) * 2 + 0.06 = 1.00 -> interval per "group"
+            BarData data = new BarData(barDataSet, barDataSet2);
+            expenseBarChartByMonth.setData(data);
+            data.setBarWidth(barWidth); // set the width of each bar
+            expenseBarChartByMonth.groupBars(0f, groupSpace, barSpace); // perform the "explicit" grouping
+            Description desc = new Description();
+            desc.setText("Incomes and expenses of the current month.");
+            expenseBarChartByMonth.setDescription(desc);
+
+            expenseBarChartByMonth.invalidate();
+        }
+
+        private static String[] getLastSixMonthShortName() {
+            String[] xAxisLabels = new String[6];
+            for (int i = 5; i >= 0; i--) {
+                YearMonth date = YearMonth.now().minusMonths(i);
+                String monthName = date.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+                xAxisLabels[5-i] = monthName;
+            }
+            return xAxisLabels;
         }
 
     }

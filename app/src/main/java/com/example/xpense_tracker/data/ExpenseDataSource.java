@@ -156,4 +156,36 @@ public class ExpenseDataSource extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_NAME, null, values);
     }
+
+    public List<Expense> getAll(LocalDate from) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Expense> expenses = new ArrayList<>();
+
+        String selection = COLUMN_NAME_CREATED_AT + " > date( ? )";
+        String[] selectionArgs = {from.toString()};
+        String sortOrder = COLUMN_NAME_CREATED_AT + " ASC";
+        Cursor cursor = db.query(
+                TABLE_NAME,        // The table to query
+                null,              // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,              // don't filter by row groups
+                sortOrder          // The sort order
+        );
+        if (cursor.moveToFirst()) {
+            do {
+                Expense expense = new Expense(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        LocalDate.parse(cursor.getString(4)),
+                        cursor.getString(5),
+                        cursor.getString(6));
+                expenses.add(expense);
+            } while (cursor.moveToNext());
+        }
+        return expenses;
+    }
 }

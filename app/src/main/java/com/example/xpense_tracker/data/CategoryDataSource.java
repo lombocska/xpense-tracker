@@ -268,8 +268,6 @@ public class CategoryDataSource extends SQLiteOpenHelper {
 
         //update expenses with new category name
         Category category = getCategory(categoryId);
-        ContentValues newCategoryName = new ContentValues();
-        newCategoryName.put(ExpenseContract.TransactionContent.COLUMN_NAME_CATEGORY, categoryName);
         db.execSQL("UPDATE expense SET category = '" + categoryName + "' WHERE category= '" + category.getName() +"'");
 
         //update category

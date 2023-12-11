@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 
 import com.example.xpense_tracker.R;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class SharedPreferenceService {
     private static volatile SharedPreferenceService instance;
     private Context context;
@@ -34,6 +37,12 @@ public class SharedPreferenceService {
                         .getSharedPreferences(getString(R.string.shared_preference_file_name), Context.MODE_PRIVATE);
         String defaultCurrency = pref.getString(getString(R.string.shared_preference_currency_key), Currency.HUF.name());
         return defaultCurrency;
+    }
+
+    public  BigDecimal applySelectedCurrency(Integer amount) {
+        Double changedAmount = Currency.valueOf(getCurrency()).getChangingNum() * amount;
+        return BigDecimal.valueOf(changedAmount).setScale(2, RoundingMode.HALF_UP);
+
     }
 
     private String getString(int resId) {

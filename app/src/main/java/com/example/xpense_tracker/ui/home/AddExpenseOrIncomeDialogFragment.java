@@ -3,6 +3,7 @@ package com.example.xpense_tracker.ui.home;
 import static android.view.View.GONE;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -26,6 +27,8 @@ import com.example.xpense_tracker.data.model.SubCategory;
 import com.example.xpense_tracker.databinding.FragmentAddExpenseOrIncomeDialogListDialogBinding;
 import com.example.xpense_tracker.databinding.FragmentFilterChipBinding;
 import com.example.xpense_tracker.ui.UIUtil;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -86,6 +89,20 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
 
     public static AddExpenseOrIncomeDialogFragment newInstanceWithUpdate(Expense expense) {
         return new AddExpenseOrIncomeDialogFragment(expense);
+    }
+    //dialog opens fully aligning with all of its view items
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
+        dialog.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
+        return dialog;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Nullable
@@ -185,12 +202,6 @@ public class AddExpenseOrIncomeDialogFragment extends BottomSheetDialogFragment 
         if (this.expense == null) {
             this.expense = new Expense();
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 
     private void addIncomeListener(List<Chip> categoryChips) {

@@ -19,6 +19,7 @@ import com.example.xpense_tracker.data.ExpenseDataSource;
 import com.example.xpense_tracker.data.ExpenseRepository;
 import com.example.xpense_tracker.data.SharedPreferenceService;
 import com.example.xpense_tracker.databinding.FragmentHomeBinding;
+import com.example.xpense_tracker.ui.UIUtil;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -32,7 +33,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements SwipeListener {
+public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private ExpenseListAdapter adapter;
@@ -57,10 +58,25 @@ public class HomeFragment extends Fragment implements SwipeListener {
         return root;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
     private void registerAdapterOnChangeListener() {
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+
+            //showing correct value in case of filtering
             @Override
             public void onChanged() {
+                super.onChanged();
+                setMonthlyState();
+            }
+
+            //showing correct value in case of removing expenses
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
                 super.onChanged();
                 setMonthlyState();
             }
@@ -71,14 +87,8 @@ public class HomeFragment extends Fragment implements SwipeListener {
         MaterialTextView monthlyIncome = binding.monthlyIncome;
         MaterialTextView monthlyExpense = binding.monthlyExpense;
         Pair<Integer, Integer> allFromCurrentMonth = expenseRepository.getAllFromCurrentMonth();
-        monthlyIncome.setText(applySelectedCurrency(allFromCurrentMonth.first).toString());
-        monthlyExpense.setText(applySelectedCurrency(allFromCurrentMonth.second).toString());
-    }
-
-    private BigDecimal applySelectedCurrency(Integer amount ) {
-        Double changedAmount = Currency.valueOf(sharedPreferenceService.getCurrency()).getChangingNum() * amount;
-        return BigDecimal.valueOf(changedAmount).setScale(2, RoundingMode.HALF_UP);
-
+        monthlyIncome.setText(sharedPreferenceService.applySelectedCurrency(allFromCurrentMonth.first).toString());
+        monthlyExpense.setText(sharedPreferenceService.applySelectedCurrency(allFromCurrentMonth.second).toString());
     }
 
     private void setCurrencySettings() {
@@ -136,14 +146,4 @@ public class HomeFragment extends Fragment implements SwipeListener {
         binding.transactionsMaterialCardView.addView(transactionsListView);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
-    @Override
-    public void onSwipe() {
-        setMonthlyState();
-    }
 }

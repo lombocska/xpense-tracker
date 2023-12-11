@@ -3,6 +3,7 @@ package com.example.xpense_tracker.ui.settings;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
 import static com.example.xpense_tracker.data.model.CategoryContract.CategoryContent.DEFAULT_CATEGORY;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ import com.example.xpense_tracker.data.model.Category;
 import com.example.xpense_tracker.data.model.CategoryType;
 import com.example.xpense_tracker.databinding.FragmentSubcategoryDialogListDialogBinding;
 import com.example.xpense_tracker.ui.UIUtil;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -40,7 +43,6 @@ public class SubCategoryDialogFragment extends BottomSheetDialogFragment {
     private Chip incomeChip;
     private Chip expenseChip;
     private CategoryRepository categoryRepository;
-    private ExtendedFloatingActionButton deleteButton;
 
     private List<Category> incomeCategories = new ArrayList<>();
     private List<Category> expenseCategories = new ArrayList<>();
@@ -65,7 +67,18 @@ public class SubCategoryDialogFragment extends BottomSheetDialogFragment {
         addExpenseListener(getExpenseCategoryChips());
         addSubCategoryAddButtonListener();
 
+        this.incomeChip.callOnClick();
+        this.incomeChip.setChecked(true);
         return binding.getRoot();
+    }
+
+    //dialog opens fully aligning with all of its view items
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
+        dialog.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
+        return dialog;
     }
 
     @Override
@@ -75,6 +88,17 @@ public class SubCategoryDialogFragment extends BottomSheetDialogFragment {
         parentFragment.showExistingCategories();
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        this.getDialog().getWindow().setSoftInputMode(SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
     private void initialize() {
         this.incomeOrExpenseChipGroup = binding.incomeOrExpenseChipGroup;
         this.categoriesChipGroup = binding.categoriesChipGroup;
@@ -82,9 +106,6 @@ public class SubCategoryDialogFragment extends BottomSheetDialogFragment {
         this.expenseChip = binding.expenseChip;
         this.subcategoryNameText = binding.subcategoryNameText;
         this.addSubcategoryButton = binding.addFabButton;
-
-        this.incomeChip.callOnClick();
-        this.incomeChip.setChecked(true);
     }
 
     private void addIncomeListener(List<Chip> categoryChips) {
@@ -158,17 +179,5 @@ public class SubCategoryDialogFragment extends BottomSheetDialogFragment {
             }
         });
     }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        this.getDialog().getWindow().setSoftInputMode(SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
 
 }
